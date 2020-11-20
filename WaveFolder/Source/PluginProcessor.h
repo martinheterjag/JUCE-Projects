@@ -58,8 +58,12 @@ public:
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
+    juce::dsp::Oscillator<float> gain_lfo_;
+    juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> gain_lfo_volume_;
     juce::dsp::Oscillator<float> thr_lfo_;
     juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> thr_lfo_volume_;
+    juce::dsp::Oscillator<float> bias_lfo_;
+    juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> bias_lfo_volume_;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WaveFolderAudioProcessor)
