@@ -24,6 +24,13 @@ GramophonyAudioProcessorEditor::GramophonyAudioProcessorEditor (GramophonyAudioP
     compress_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (audioProcessor.apvts, "COMPRESS", compress_slider_);
 
+    tone_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    tone_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
+    addAndMakeVisible(tone_slider_);
+
+    tone_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (audioProcessor.apvts, "TONE", tone_slider_);
+    
     vibrato_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     vibrato_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
     addAndMakeVisible(vibrato_slider_);
@@ -105,9 +112,9 @@ void GramophonyAudioProcessorEditor::paint(juce::Graphics& g)
     g.drawLine(juce::Line<float>(108.0f, 203.0f, 92.0f, 229.0f), LINE_THICKNESS);
 
     SetupSections();
-    g.setFont(20.0f);
+    g.setFont(25.0f);
     g.drawFittedText("COMP", comp_section_, juce::Justification::left, 1);
-    g.drawFittedText("TONE", filter_section_, juce::Justification::left, 1);
+    g.drawFittedText("TONE", tone_section_, juce::Justification::left, 1);
     g.drawFittedText("VIBE", vibrato_section_, juce::Justification::left, 1);
     g.drawFittedText("MIX", mix_section_, juce::Justification::left, 1);
 }
@@ -125,6 +132,7 @@ void GramophonyAudioProcessorEditor::resized()
 {
     SetupSections();
     compress_slider_.setBounds(comp_section_);
+    tone_slider_.setBounds(tone_section_);
     vibrato_slider_.setBounds(vibrato_section_);
     mix_slider_.setBounds(mix_section_);
 }
@@ -133,11 +141,11 @@ void GramophonyAudioProcessorEditor::SetupSections()
 {
     juce::Rectangle<int> r = getLocalBounds();
     top_section_ = r.removeFromTop(50);
-    picture_section_ = r.removeFromLeft(350);
+    picture_section_ = r.removeFromLeft(310);
     interface_section_ = r;
     int section_height = interface_section_.getHeight() / 4;
     comp_section_ = interface_section_.removeFromTop(section_height);
-    filter_section_ = interface_section_.removeFromTop(section_height);
+    tone_section_ = interface_section_.removeFromTop(section_height);
     vibrato_section_ = interface_section_.removeFromTop(section_height);
     mix_section_ = interface_section_;
 }

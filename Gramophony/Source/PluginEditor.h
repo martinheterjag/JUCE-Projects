@@ -34,19 +34,20 @@ private:
     juce::Slider compress_slider_;
     SliderAttatchmentPtr compress_slider_attachment_;
     
+    juce::Slider tone_slider_;
+    SliderAttatchmentPtr tone_slider_attachment_;
+
     juce::Slider vibrato_slider_;
     SliderAttatchmentPtr vibrato_slider_attachment_;
 
     juce::Slider mix_slider_;
     SliderAttatchmentPtr mix_slider_attachment_;
 
-    juce::ToggleButton mix_button_;
-
     juce::Rectangle<int> top_section_;
     juce::Rectangle<int> picture_section_;
     juce::Rectangle<int> interface_section_;
     juce::Rectangle<int> comp_section_;
-    juce::Rectangle<int> filter_section_;
+    juce::Rectangle<int> tone_section_;
     juce::Rectangle<int> vibrato_section_;
     juce::Rectangle<int> mix_section_;
 

@@ -213,6 +213,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GramophonyAudioProcessor::cr
 
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("COMPRESS", "Compress", 0.04f, 0.3f, 0.1f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO", "Vibrato", 0.0f, 0.1f, 0.01f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("TONE", "Tone", 0.0f, 1.0f, 1.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.0f, 1.0f, 1.0f));
     return { parameters.begin(), parameters.end() };
 }
