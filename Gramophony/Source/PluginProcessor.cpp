@@ -9,6 +9,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+constexpr float BP_FREQ = 2950.0f;
+
 //==============================================================================
 GramophonyAudioProcessor::GramophonyAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -20,7 +22,7 @@ GramophonyAudioProcessor::GramophonyAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-       apvts(*this, nullptr, "Parameters", createParameters())
+        apvts(*this, nullptr, "Parameters", createParameters())
 #endif
 {
 }
@@ -96,12 +98,18 @@ void GramophonyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    juce::dsp::ProcessSpec chorus_spec = { sampleRate, samplesPerBlock, getMainBusNumOutputChannels() };
-    chorus_.prepare(chorus_spec);
+    juce::dsp::ProcessSpec spec = { sampleRate, samplesPerBlock, getMainBusNumOutputChannels() };
 
-    juce::dsp::ProcessSpec wetdry_spec = { sampleRate, samplesPerBlock, getMainBusNumOutputChannels() };
-    mix_.prepare(chorus_spec);
+    chorus_.prepare(spec);
 
+    mix_.prepare(spec);
+
+    float frequency = apvts.getRawParameterValue("TONE")->load();
+    filter_ch1_.prepare(spec);
+    filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(sampleRate, frequency, 6.0f);
+
+    filter_ch2_.prepare(spec);
+    filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(sampleRate, frequency, 6.0f);
 }
 
 void GramophonyAudioProcessor::releaseResources()
@@ -157,27 +165,39 @@ void GramophonyAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, ju
         {
             // TODO: make this value tweakable.
             float treshold = apvts.getRawParameterValue("COMPRESS")->load();
-            if (*buffer.getWritePointer(channel, sample) >= treshold) {
-                *buffer.getWritePointer(channel, sample) = (*buffer.getWritePointer(channel, sample) / 4) + (3 * treshold / 4);
-            } else if (*buffer.getWritePointer(channel, sample) <= -treshold) {
-                *buffer.getWritePointer(channel, sample) = (*buffer.getWritePointer(channel, sample) / 4) - (3 * treshold / 4);
-            }
-            // unity gain when threshold ~ 0.3 which is the max value.
-            *buffer.getWritePointer(channel, sample) *= 2.0f - (11.0f * treshold * treshold);
+            float frequency = apvts.getRawParameterValue("TONE")->load();
 
+            if (*buffer.getReadPointer(channel, sample) >= treshold) {
+                *buffer.getWritePointer(channel, sample) = (*buffer.getReadPointer(channel, sample) / 4) + (3 * treshold / 4);
+            } else if (*buffer.getReadPointer(channel, sample) <= -treshold) {
+                *buffer.getWritePointer(channel, sample) = (*buffer.getReadPointer(channel, sample) / 4) - (3 * treshold / 4);
+            }
+            // Partly calculated partly by ear set makeup gain.
+            *buffer.getWritePointer(channel, sample) *= 5.0f - (11.0f * treshold * treshold);
+
+            if (channel == 0) {
+                filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(getSampleRate(), frequency + 10.0f, 3.0f);
+                *buffer.getWritePointer(channel, sample) = filter_ch1_.processSample(*buffer.getReadPointer(channel, sample));
+            }
+            else if (channel == 1) {
+                filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(getSampleRate(), frequency - 10.0f, 3.03f);
+                *buffer.getWritePointer(channel, sample) = filter_ch2_.processSample(*buffer.getReadPointer(channel, sample));
+            }
         }
     }
-    
-    chorus_.setRate(2.0f);
-    chorus_.setDepth(apvts.getRawParameterValue("VIBRATO")->load());
-    chorus_.setCentreDelay(10.0f);
-    chorus_.setFeedback(0.0f);
-    chorus_.setMix(1.0f);
     auto block = juce::dsp::AudioBlock<float>(buffer);
     auto contextToUse = juce::dsp::ProcessContextReplacing<float>(block);
+
+
+    chorus_.setRate(apvts.getRawParameterValue("VIBRATO_RATE")->load());
+    chorus_.setDepth(apvts.getRawParameterValue("VIBRATO")->load());
+    chorus_.setCentreDelay(40.0f);
+    chorus_.setFeedback(0.0f);
+    chorus_.setMix(1.0f);
+
     chorus_.process(contextToUse);
 
-    mix_.setWetMixProportion(apvts.getRawParameterValue("MIX")->load());
+    mix_.setWetMixProportion(1.0f - apvts.getRawParameterValue("MIX")->load());
     mix_.mixWetSamples(block);
 }
 
@@ -211,13 +231,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout GramophonyAudioProcessor::cr
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
 
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("COMPRESS", "Compress", 0.04f, 0.3f, 0.1f));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO", "Vibrato", 0.0f, 0.1f, 0.01f));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("TONE", "Tone", 0.0f, 1.0f, 1.0f));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.0f, 1.0f, 1.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("COMPRESS", "Compress", 0.04f, 0.45f, 0.1f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO", "Vibrato", 0.0f, 0.15f, 0.01f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO_RATE", "Rate", 0.5f, 4.0f, 2.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("TONE", "Tone", 320.1f, 4700.0f, 2000.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.0f, 0.5f, 0.0f));
     return { parameters.begin(), parameters.end() };
 }
-
 
 //==============================================================================
 // This creates new instances of the plugin..

@@ -14,7 +14,8 @@
 //==============================================================================
 /**
 */
-class GramophonyAudioProcessorEditor  : public juce::AudioProcessorEditor
+class GramophonyAudioProcessorEditor  : public juce::AudioProcessorEditor,
+                                        public juce::Slider::Listener
 {
 public:
     GramophonyAudioProcessorEditor (GramophonyAudioProcessor&);
@@ -27,7 +28,9 @@ public:
     void resized() override;
 
 private:
+    float sliderToAplhaValue(juce::Slider& slider);
     void SetupSections();
+    void sliderValueChanged(juce::Slider* slider) override;
 
     typedef std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> SliderAttatchmentPtr;
 
@@ -40,16 +43,24 @@ private:
     juce::Slider vibrato_slider_;
     SliderAttatchmentPtr vibrato_slider_attachment_;
 
+    juce::Slider vibrato_rate_slider_;
+    SliderAttatchmentPtr vibrato_rate_slider_attachment_;
+
     juce::Slider mix_slider_;
     SliderAttatchmentPtr mix_slider_attachment_;
-
+    
     juce::Rectangle<int> top_section_;
     juce::Rectangle<int> picture_section_;
-    juce::Rectangle<int> interface_section_;
     juce::Rectangle<int> comp_section_;
     juce::Rectangle<int> tone_section_;
     juce::Rectangle<int> vibrato_section_;
+    juce::Rectangle<int> vibrato_rate_section_;
     juce::Rectangle<int> mix_section_;
+    juce::Rectangle<int> comp_text_section_;
+    juce::Rectangle<int> tone_text_section_;
+    juce::Rectangle<int> vibrato_text_section_;
+    juce::Rectangle<int> mix_text_section_;
+
 
     GramophonyAudioProcessor& audioProcessor;
 

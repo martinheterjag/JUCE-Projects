@@ -19,6 +19,7 @@ GramophonyAudioProcessorEditor::GramophonyAudioProcessorEditor (GramophonyAudioP
 
     compress_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     compress_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
+    compress_slider_.addListener(this);
     addAndMakeVisible(compress_slider_);
 
     compress_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
@@ -26,6 +27,7 @@ GramophonyAudioProcessorEditor::GramophonyAudioProcessorEditor (GramophonyAudioP
 
     tone_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     tone_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
+    tone_slider_.addListener(this);
     addAndMakeVisible(tone_slider_);
 
     tone_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
@@ -33,20 +35,27 @@ GramophonyAudioProcessorEditor::GramophonyAudioProcessorEditor (GramophonyAudioP
     
     vibrato_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     vibrato_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
+    vibrato_slider_.addListener(this);
     addAndMakeVisible(vibrato_slider_);
 
     vibrato_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (audioProcessor.apvts, "VIBRATO", vibrato_slider_);
 
+    vibrato_rate_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    vibrato_rate_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
+    vibrato_rate_slider_.addListener(this);
+    addAndMakeVisible(vibrato_rate_slider_);
+
+    vibrato_rate_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (audioProcessor.apvts, "VIBRATO_RATE", vibrato_rate_slider_);
+
     mix_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     mix_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
+    mix_slider_.addListener(this);
     addAndMakeVisible(mix_slider_);
 
     mix_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (audioProcessor.apvts, "MIX", mix_slider_);
-
-    
-
 
     setSize (500, 300);
 }
@@ -64,8 +73,6 @@ void GramophonyAudioProcessorEditor::paint(juce::Graphics& g)
     g.setColour(juce::Colour(0xff123456));
     g.setFont(40.0f);
     g.drawFittedText("GRAMOPHONY", getLocalBounds(), juce::Justification::centredTop, 1);
-
-
 
     // Gramophone
     juce::Path funnel;
@@ -94,7 +101,24 @@ void GramophonyAudioProcessorEditor::paint(juce::Graphics& g)
 
     g.setColour(juce::Colour(0xff123456));
     g.fillPath(base);
-    g.setColour(juce::Colours::goldenrod);
+
+    // Same as background to hide parts of base when funnel is painted with alpha
+    g.setColour(juce::Colours::beige);
+    g.fillPath(funnel);
+
+    g.setColour(juce::Colours::orange.withAlpha(0.2f + sliderToAplhaValue(tone_slider_) / 2.0f));
+    g.fillPath(funnel);
+
+    g.setColour(juce::Colours::yellow.withAlpha(sliderToAplhaValue(compress_slider_) / 2.0f));
+    g.fillPath(funnel);
+
+    g.setColour(juce::Colours::blueviolet.withAlpha(sliderToAplhaValue(vibrato_slider_) / 4.0f));
+    g.fillPath(funnel);
+
+    g.setColour(juce::Colours::rebeccapurple.withAlpha(sliderToAplhaValue(vibrato_rate_slider_) / 3.0f));
+    g.fillPath(funnel);
+
+    g.setColour(juce::Colours::orangered.withAlpha(sliderToAplhaValue(mix_slider_) / 3.0f));
     g.fillPath(funnel);
 
 
@@ -112,17 +136,21 @@ void GramophonyAudioProcessorEditor::paint(juce::Graphics& g)
     g.drawLine(juce::Line<float>(108.0f, 203.0f, 92.0f, 229.0f), LINE_THICKNESS);
 
     SetupSections();
-    g.setFont(25.0f);
-    g.drawFittedText("COMP", comp_section_, juce::Justification::left, 1);
-    g.drawFittedText("TONE", tone_section_, juce::Justification::left, 1);
-    g.drawFittedText("VIBE", vibrato_section_, juce::Justification::left, 1);
-    g.drawFittedText("MIX", mix_section_, juce::Justification::left, 1);
+    g.setFont(18.0f);
+    g.drawFittedText("COMP", comp_text_section_, juce::Justification::left, 1);
+    g.drawFittedText("TONE", tone_text_section_, juce::Justification::left, 1);
+    g.drawFittedText("VIBE", vibrato_text_section_, juce::Justification::left, 1);
+    g.drawFittedText("DRY", mix_text_section_, juce::Justification::left, 1);
 }
 
+float GramophonyAudioProcessorEditor::sliderToAplhaValue(juce::Slider& slider) {
+    float range = (slider.getMaximum() - slider.getMinimum());
+    return (slider.getValue() - slider.getMinimum()) / range;
+}
 
-void GramophonyAudioProcessorEditor::DrawThreePointLine(juce::Graphics& g, 
-                                                        float x1, float y1, 
-                                                        float x2, float y2, 
+void GramophonyAudioProcessorEditor::DrawThreePointLine(juce::Graphics& g,
+                                                        float x1, float y1,
+                                                        float x2, float y2,
                                                         float x3, float y3) {
     g.drawLine(juce::Line<float>(x1, y1, x2, y2), LINE_THICKNESS);
     g.drawLine(juce::Line<float>(x2, y2, x3, y3), LINE_THICKNESS);
@@ -134,6 +162,7 @@ void GramophonyAudioProcessorEditor::resized()
     compress_slider_.setBounds(comp_section_);
     tone_slider_.setBounds(tone_section_);
     vibrato_slider_.setBounds(vibrato_section_);
+    vibrato_rate_slider_.setBounds(vibrato_rate_section_);
     mix_slider_.setBounds(mix_section_);
 }
 
@@ -142,10 +171,26 @@ void GramophonyAudioProcessorEditor::SetupSections()
     juce::Rectangle<int> r = getLocalBounds();
     top_section_ = r.removeFromTop(50);
     picture_section_ = r.removeFromLeft(310);
-    interface_section_ = r;
-    int section_height = interface_section_.getHeight() / 4;
-    comp_section_ = interface_section_.removeFromTop(section_height);
-    tone_section_ = interface_section_.removeFromTop(section_height);
-    vibrato_section_ = interface_section_.removeFromTop(section_height);
-    mix_section_ = interface_section_;
+
+    juce::Rectangle<int> interface_section = r;
+    int section_height = interface_section.getHeight() / 4;
+    constexpr int text_section_width = 40;
+    
+    comp_section_ = interface_section.removeFromTop(section_height);
+    comp_text_section_ = comp_section_.removeFromLeft(text_section_width);
+
+    tone_section_ = interface_section.removeFromTop(section_height);
+    tone_text_section_ = tone_section_.removeFromLeft(text_section_width);
+
+    vibrato_section_ = interface_section.removeFromTop(section_height);
+    vibrato_text_section_ = vibrato_section_.removeFromLeft(text_section_width);
+    vibrato_rate_section_ = vibrato_section_.removeFromRight(vibrato_section_.getWidth() / 2);
+
+    mix_section_ = interface_section;
+    mix_text_section_ = mix_section_.removeFromLeft(text_section_width);
+}
+
+void GramophonyAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
+{
+    repaint();
 }

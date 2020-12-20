@@ -59,6 +59,8 @@ private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
     juce::dsp::Chorus<float> chorus_;
+    juce::dsp::IIR::Filter<float> filter_ch1_;
+    juce::dsp::IIR::Filter<float> filter_ch2_;
     juce::dsp::DryWetMixer<float> mix_;
 
     //==============================================================================
