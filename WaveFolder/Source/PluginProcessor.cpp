@@ -160,11 +160,6 @@ void WaveFolderAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, ju
     for (float sample = 0; sample < buffer.getNumSamples(); ++sample) {
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
-            // Do not add any effects if volume is to low to prevent lfos to leak.
-            if (*buffer.getWritePointer(channel, sample) < gate_threshold &&
-                *buffer.getWritePointer(channel, sample) > -gate_threshold) {
-                continue;
-            }
             float dry_sample = *buffer.getWritePointer(channel, sample);
             // LFO settings
             gain_lfo_.setFrequency(apvts.getRawParameterValue("GAIN_LFO_RATE")->load());
@@ -183,6 +178,12 @@ void WaveFolderAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, ju
             float bias = apvts.getRawParameterValue("BIAS")->load() + bias_lfo_offset;
             float input_gain = apvts.getRawParameterValue("GAIN")->load() + gain_lfo_offset;
             float output_gain = apvts.getRawParameterValue("VOLUME")->load();
+
+            // Do not add any effects if volume is to low to prevent lfos to leak.
+            if (*buffer.getWritePointer(channel, sample) + bias < gate_threshold &&
+                *buffer.getWritePointer(channel, sample) + bias > -gate_threshold) {
+                continue;
+            }
 
             // Process the signal using parameters
             *buffer.getWritePointer(channel, sample) *= input_gain;
