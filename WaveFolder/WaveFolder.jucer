@@ -5,9 +5,14 @@
               version="1.0.0" companyName="Martinheterjag" companyCopyright="Copyright (C) Martin Eriksson, Source code licenced under MIT license"
               companyWebsite="martinheterjag.com" pluginVST3Category="Fx" cppLanguageStandard="17"
               pluginFormats="buildVST3" pluginName="WaveFolder" pluginDesc="WaveFolder"
-              companyEmail="martinheterjag@msn.com">
+              companyEmail="martinheterjag@msn.com" compilerFlagSchemes="NewScheme"
+              headerPath="D:\JUCE\projects\JUCE-Projects\Common">
   <MAINGROUP id="izyR74" name="WaveFolder">
     <GROUP id="{81AF105C-A589-52C7-FFAF-A46A1E3CD61F}" name="Source">
+      <GROUP id="{8DD966D8-4299-20BE-9399-F7923DBA43FB}" name="Common">
+        <FILE id="K0Z9f5" name="InfoButton.cpp" compile="1" resource="0" file="../Common/InfoButton.cpp"/>
+        <FILE id="WZO9JG" name="InfoButton.h" compile="0" resource="0" file="../Common/InfoButton.h"/>
+      </GROUP>
       <FILE id="ipPLrE" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="j63fwQ" name="PluginProcessor.h" compile="0" resource="0"
