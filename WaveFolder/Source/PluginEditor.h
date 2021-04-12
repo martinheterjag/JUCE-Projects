@@ -25,6 +25,7 @@ public:
     void resized() override;
 
 private:
+    void createInfoButton();
     void buttonStateChanged(juce::Button* button) override;
     void buttonClicked(juce::Button* button) override;
     void DivideSections();

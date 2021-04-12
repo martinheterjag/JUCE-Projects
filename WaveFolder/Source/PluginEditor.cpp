@@ -98,25 +98,8 @@ WaveFolderAudioProcessorEditor::WaveFolderAudioProcessorEditor (WaveFolderAudioP
 
     setSize (600, 250);
     DivideSections();
-
-    info_button_.setButtonText("i");
-    info_button_.addListener(this);
-    addAndMakeVisible(info_button_);
-
-    info_text_.setColour(juce::Label::backgroundColourId, getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-    info_text_.setColour(juce::Label::outlineColourId, juce::Colours::white);
-    info_text_.setColour(juce::Label::textColourId, juce::Colours::white);
-    info_text_.setJustificationType(juce::Justification::centredLeft);
-    info_text_.setBorderSize(juce::BorderSize<int>(20, 70, 20, 70));
-
-    std::string info_string = "";
-
-    info_string += ProjectInfo::companyName + std::string(" ") + ProjectInfo::projectName + std::string(" version ") + ProjectInfo::versionString + std::string("\n\n");
-    info_string += std::string("Copyright (C) Martin Eriksson, \nSource code licenced under MIT license\n\n");
-    info_string += std::string("Check out my other projects at ") + JucePlugin_ManufacturerWebsite + std::string("\n");
-    info_text_.setText(info_string, juce::dontSendNotification);
-    addAndMakeVisible(info_text_);
-    info_text_.setVisible(false);
+    
+    createInfoButton();
 }
 
 WaveFolderAudioProcessorEditor::~WaveFolderAudioProcessorEditor()
@@ -187,6 +170,27 @@ void WaveFolderAudioProcessorEditor::resized()
     bias_lfo_rate_slider_.setBounds(bias_lfo_rate_section_);
     bias_lfo_depth_slider_.setBounds(bias_lfo_depth_section_);
     mix_slider_.setBounds(mix_section_);
+}
+
+void WaveFolderAudioProcessorEditor::createInfoButton() {
+    info_button_.setButtonText("i");
+    info_button_.addListener(this);
+    addAndMakeVisible(info_button_);
+
+    info_text_.setColour(juce::Label::backgroundColourId, getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+    info_text_.setColour(juce::Label::outlineColourId, juce::Colours::white);
+    info_text_.setColour(juce::Label::textColourId, juce::Colours::white);
+    info_text_.setJustificationType(juce::Justification::centredLeft);
+    info_text_.setBorderSize(juce::BorderSize<int>(20, 70, 20, 70));
+
+    std::string info_string = "";
+    info_string += ProjectInfo::companyName + std::string(" ") + ProjectInfo::projectName + std::string(" version ") + ProjectInfo::versionString + std::string("\n\n");
+    info_string += std::string("Copyright (C) Martin Eriksson, \nSource code licenced under MIT license\n\n");
+    info_string += std::string("Check out my other projects at ") + JucePlugin_ManufacturerWebsite + std::string("\n");
+
+    info_text_.setText(info_string, juce::dontSendNotification);
+    addAndMakeVisible(info_text_);
+    info_text_.setVisible(false);
 }
 
 void WaveFolderAudioProcessorEditor::buttonStateChanged(juce::Button* button)
