@@ -42,8 +42,8 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "WaveFolder";
-    const char* const  companyName    = "martinheterjag";
-    const char* const  versionString  = "0.0.0";
-    const int          versionNumber  = 0x0;
+    const char* const  companyName    = "Martinheterjag";
+    const char* const  versionString  = "1.0.0";
+    const int          versionNumber  = 0x10000;
 }
 #endif

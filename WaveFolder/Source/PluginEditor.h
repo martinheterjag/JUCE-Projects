@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class WaveFolderAudioProcessorEditor  : public juce::AudioProcessorEditor
+class WaveFolderAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Button::Listener
 {
 public:
     WaveFolderAudioProcessorEditor (WaveFolderAudioProcessor&);
@@ -25,7 +25,11 @@ public:
     void resized() override;
 
 private:
+    void buttonStateChanged(juce::Button* button) override;
+    void buttonClicked(juce::Button* button) override;
     void DivideSections();
+    juce::TextButton info_button_;
+    juce::Label info_text_;
     juce::Slider gain_slider_;
     juce::Slider threshold_slider_;
     juce::Slider bias_slider_;

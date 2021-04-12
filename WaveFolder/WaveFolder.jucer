@@ -2,10 +2,10 @@
 
 <JUCERPROJECT id="yiIGXi" name="WaveFolder" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              version="0.0.0" companyName="martinheterjag" companyCopyright="(C) Martin Eriksson"
-              companyWebsite="github.com/martinheterjag" pluginVST3Category="Fx"
-              cppLanguageStandard="17" pluginFormats="buildVST3" pluginName="WaveFolder"
-              pluginDesc="WaveFolder">
+              version="1.0.0" companyName="Martinheterjag" companyCopyright="Copyright (C) Martin Eriksson, Source code licenced under MIT license"
+              companyWebsite="martinheterjag.com" pluginVST3Category="Fx" cppLanguageStandard="17"
+              pluginFormats="buildVST3" pluginName="WaveFolder" pluginDesc="WaveFolder"
+              companyEmail="martinheterjag@msn.com">
   <MAINGROUP id="izyR74" name="WaveFolder">
     <GROUP id="{81AF105C-A589-52C7-FFAF-A46A1E3CD61F}" name="Source">
       <FILE id="ipPLrE" name="PluginProcessor.cpp" compile="1" resource="0"
