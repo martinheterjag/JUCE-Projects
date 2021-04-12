@@ -195,14 +195,11 @@ void WaveFolderAudioProcessorEditor::createInfoButton() {
 
 void WaveFolderAudioProcessorEditor::buttonStateChanged(juce::Button* button)
 {
-    std::cout << "hello" << std::endl;
     if (button == &info_button_) {
         if (info_button_.isOver()) {
-            //info_text_.setText("hooovering now !!! :):):)", juce::dontSendNotification);
             info_text_.setVisible(true);
         }
         else {
-            //info_text_.setText("no hoovering at the moment :(", juce::dontSendNotification);
             info_text_.setVisible(false);
         }
     }
