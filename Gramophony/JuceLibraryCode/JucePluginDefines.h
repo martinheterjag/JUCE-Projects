@@ -47,10 +47,10 @@
  #define JucePlugin_Manufacturer           "martinheterjag"
 #endif
 #ifndef  JucePlugin_ManufacturerWebsite
- #define JucePlugin_ManufacturerWebsite    ""
+ #define JucePlugin_ManufacturerWebsite    "martinheterjag.com"
 #endif
 #ifndef  JucePlugin_ManufacturerEmail
- #define JucePlugin_ManufacturerEmail      ""
+ #define JucePlugin_ManufacturerEmail      "martinheterjag@msn.com"
 #endif
 #ifndef  JucePlugin_ManufacturerCode
  #define JucePlugin_ManufacturerCode       0x4d616e75
@@ -107,7 +107,7 @@
  #define JucePlugin_AUManufacturerCode     JucePlugin_ManufacturerCode
 #endif
 #ifndef  JucePlugin_CFBundleIdentifier
- #define JucePlugin_CFBundleIdentifier     com.yourcompany.Gramophony
+ #define JucePlugin_CFBundleIdentifier     com.Martinheterjag.Gramophony
 #endif
 #ifndef  JucePlugin_RTASCategory
  #define JucePlugin_RTASCategory           0
@@ -125,7 +125,7 @@
  #define JucePlugin_RTASDisableMultiMono   0
 #endif
 #ifndef  JucePlugin_AAXIdentifier
- #define JucePlugin_AAXIdentifier          com.yourcompany.Gramophony
+ #define JucePlugin_AAXIdentifier          com.Martinheterjag.Gramophony
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode

@@ -3,9 +3,15 @@
 <JUCERPROJECT id="qzjHAR" name="Gramophony" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               version="1.0.0" pluginFormats="buildVST3" pluginManufacturer="martinheterjag"
-              pluginVST3Category="Fx">
+              pluginVST3Category="Fx" headerPath="D:\JUCE\projects\JUCE-Projects\Common"
+              companyName="Martinheterjag" companyCopyright="Copyright (C) Martin Eriksson"
+              companyWebsite="martinheterjag.com" companyEmail="martinheterjag@msn.com">
   <MAINGROUP id="vWEXEi" name="Gramophony">
     <GROUP id="{4E88F351-CD89-32ED-FEBF-2940B98ABBD8}" name="Source">
+      <GROUP id="{567CB8EF-D1A4-2168-3F14-C6168EAC9121}" name="Common">
+        <FILE id="IbL5yr" name="InfoButton.cpp" compile="1" resource="0" file="../Common/InfoButton.cpp"/>
+        <FILE id="lPLZl7" name="InfoButton.h" compile="0" resource="0" file="../Common/InfoButton.h"/>
+      </GROUP>
       <FILE id="OjZyJp" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="tg1t43" name="PluginProcessor.h" compile="0" resource="0"

@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include <InfoButton.h>
 
 //==============================================================================
 /**
@@ -31,6 +32,8 @@ private:
     float sliderToAplhaValue(juce::Slider& slider);
     void SetupSections();
     void sliderValueChanged(juce::Slider* slider) override;
+
+    InfoButton info_button_;
 
     typedef std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> SliderAttatchmentPtr;
 

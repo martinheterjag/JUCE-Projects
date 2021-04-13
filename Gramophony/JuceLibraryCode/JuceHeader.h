@@ -42,7 +42,7 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "Gramophony";
-    const char* const  companyName    = "";
+    const char* const  companyName    = "Martinheterjag";
     const char* const  versionString  = "1.0.0";
     const int          versionNumber  = 0x10000;
 }

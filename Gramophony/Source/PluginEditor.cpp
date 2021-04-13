@@ -13,7 +13,7 @@ constexpr float LINE_THICKNESS = 4.0f;
 
 //==============================================================================
 GramophonyAudioProcessorEditor::GramophonyAudioProcessorEditor (GramophonyAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(juce::Colours::darkgrey)
 {
     constexpr int TEXT_BOX_SIZE = 25;
 
@@ -57,6 +57,7 @@ GramophonyAudioProcessorEditor::GramophonyAudioProcessorEditor (GramophonyAudioP
     mix_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (audioProcessor.apvts, "MIX", mix_slider_);
 
+    info_button_.addToEditor(this);
     setSize (500, 300);
 }
 
@@ -158,6 +159,8 @@ void GramophonyAudioProcessorEditor::DrawThreePointLine(juce::Graphics& g,
 
 void GramophonyAudioProcessorEditor::resized()
 {
+    info_button_.button.setBounds(getWidth() - 35, 10, 20, 20);
+    info_button_.info_text.setBounds(30, 50, getWidth() - 60, getHeight() - 100);
     SetupSections();
     compress_slider_.setBounds(comp_section_);
     tone_slider_.setBounds(tone_section_);
