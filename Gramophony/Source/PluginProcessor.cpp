@@ -176,11 +176,11 @@ void GramophonyAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, ju
             *buffer.getWritePointer(channel, sample) *= 5.0f - (11.0f * treshold * treshold);
 
             if (channel == 0) {
-                filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(getSampleRate(), frequency + 10.0f, 3.0f);
+                filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(getSampleRate(), frequency + 10.0f, 2.7f);
                 *buffer.getWritePointer(channel, sample) = filter_ch1_.processSample(*buffer.getReadPointer(channel, sample));
             }
             else if (channel == 1) {
-                filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(getSampleRate(), frequency - 10.0f, 3.03f);
+                filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(getSampleRate(), frequency - 10.0f, 2.73f);
                 *buffer.getWritePointer(channel, sample) = filter_ch2_.processSample(*buffer.getReadPointer(channel, sample));
             }
         }
@@ -191,7 +191,7 @@ void GramophonyAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, ju
 
     chorus_.setRate(apvts.getRawParameterValue("VIBRATO_RATE")->load());
     chorus_.setDepth(apvts.getRawParameterValue("VIBRATO")->load());
-    chorus_.setCentreDelay(40.0f);
+    chorus_.setCentreDelay(1.0f);
     chorus_.setFeedback(0.0f);
     chorus_.setMix(1.0f);
 
@@ -232,7 +232,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GramophonyAudioProcessor::cr
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
 
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("COMPRESS", "Compress", 0.04f, 0.45f, 0.1f));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO", "Vibrato", 0.0f, 0.15f, 0.01f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO", "Vibrato", 0.0f, 0.33f, 0.01f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO_RATE", "Rate", 0.5f, 4.0f, 2.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("TONE", "Tone", 320.1f, 4700.0f, 2000.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.0f, 0.5f, 0.0f));
