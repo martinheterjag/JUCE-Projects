@@ -1,0 +1,18 @@
+CHANGELOG FOR MARTINHETERJAG WAVE FOLDER
+
+V 1.0.1
+* Fix a bug where the knob settings was not saved when saving a project in DAW, nor loaded properly when loading a project.
+
+V 1.0.0
+* Initial release
+
+
+Visit my website (Contact info available on website):
+https://martinheterjag.com
+
+Found any bugs? Please create a bug report at:
+https://github.com/martinheterjag/JUCE-Projects
+
+
+Thank you very much for downloading this VST plugin, use it to make some noise!
+<3 Martin
