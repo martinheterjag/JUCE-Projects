@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="yiIGXi" name="WaveFolder" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              version="1.0.0" companyName="Martinheterjag" companyCopyright="Copyright (C) Martin Eriksson, Source code licenced under MIT license"
+              version="1.0.1" companyName="Martinheterjag" companyCopyright="Copyright (C) Martin Eriksson, Source code licenced under MIT license"
               companyWebsite="martinheterjag.com" pluginVST3Category="Fx" cppLanguageStandard="17"
               pluginFormats="buildVST3" pluginName="WaveFolder" pluginDesc="WaveFolder"
               companyEmail="martinheterjag@msn.com" compilerFlagSchemes="NewScheme"
