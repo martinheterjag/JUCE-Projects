@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="qzjHAR" name="Gramophony" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              version="1.0.1" pluginFormats="buildVST3" pluginManufacturer="Martinheterjag"
+              version="1.0.2" pluginFormats="buildVST3" pluginManufacturer="Martinheterjag"
               pluginVST3Category="Fx" headerPath="D:\JUCE\projects\JUCE-Projects\Common"
               companyName="Martinheterjag" companyCopyright="Copyright (C) Martin Eriksson"
               companyWebsite="martinheterjag.com" companyEmail="martinheterjag@msn.com">
