@@ -61,7 +61,9 @@ private:
     juce::dsp::Reverb reverb_;
     juce::Reverb::Parameters params_;
     juce::dsp::IIR::Filter<float> filter_ch1_;
+    juce::dsp::IIR::Filter<float> hp_ch1_;
     juce::dsp::IIR::Filter<float> filter_ch2_;
+    juce::dsp::IIR::Filter<float> hp_ch2_;
     juce::dsp::DryWetMixer<float> mix_;
 
     //==============================================================================

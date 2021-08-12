@@ -20,10 +20,16 @@ EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcess
     reverb_slider_.addListener(this);
     addAndMakeVisible(reverb_slider_);
 
+    reverb_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (audioProcessor.apvts, "REVERB", reverb_slider_);
+
     mix_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     mix_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
     mix_slider_.addListener(this);
     addAndMakeVisible(mix_slider_);
+
+    mix_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (audioProcessor.apvts, "MIX", mix_slider_);
 
     info_button_.addToEditor(this);
     setSize(400, 300);

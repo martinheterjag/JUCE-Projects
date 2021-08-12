@@ -23,10 +23,10 @@ EasyverbAudioProcessor::EasyverbAudioProcessor()
         apvts(*this, nullptr, "Parameters", createParameters())
 #endif
 {
-    params_.roomSize = 0.8f;
+    params_.roomSize = 0.5f;
     params_.damping = 0.8f;
     params_.width = 0.5f;
-    params_.freezeMode = 0.3f;
+    params_.freezeMode = 0.0f;
     params_.dryLevel = 0.0f;
     params_.wetLevel = 1.0f;
 }
@@ -106,13 +106,15 @@ void EasyverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 
     mix_.prepare(spec);
 
-    // TODO: EQ the wet signal with IIR filters.
-    //float frequency = apvts.getRawParameterValue("TONE")->load();
-    //filter_ch1_.prepare(spec);
-    //filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(sampleRate, frequency, 6.0f);
+    filter_ch1_.prepare(spec);
+    filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1200, 2.1f, 0.6);
+    hp_ch1_.prepare(spec);
+    hp_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 110.0, 3.0f);
 
-    //filter_ch2_.prepare(spec);
-    //filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(sampleRate, frequency, 6.0f);
+    filter_ch2_.prepare(spec);
+    filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1194, 2.0f, 0.6);
+    hp_ch2_.prepare(spec);
+    hp_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 110.0, 3.1f);
 }
 
 void EasyverbAudioProcessor::releaseResources()
@@ -162,27 +164,26 @@ void EasyverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 
     mix_.pushDrySamples(buffer);
 
-    //for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    //{
-    //    auto* channelData = buffer.getWritePointer (channel);
-
-    //    // ..do something to the data...
-    //}
+    for (float sample = 0; sample < buffer.getNumSamples(); ++sample) {
+        for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        {
+            if (channel == 0) {
+                *buffer.getWritePointer(channel, sample) = filter_ch1_.processSample(*buffer.getReadPointer(channel, sample));
+                *buffer.getWritePointer(channel, sample) = hp_ch1_.processSample(*buffer.getReadPointer(channel, sample));
+            }
+            else if (channel == 1) {
+                *buffer.getWritePointer(channel, sample) = filter_ch2_.processSample(*buffer.getReadPointer(channel, sample));
+                *buffer.getWritePointer(channel, sample) = hp_ch2_.processSample(*buffer.getReadPointer(channel, sample));
+            }
+        }
+    }
 
     auto block = juce::dsp::AudioBlock<float>(buffer);
     auto contextToUse = juce::dsp::ProcessContextReplacing<float>(block);
 
-    float reverb_amount = apvts.getRawParameterValue("MIX")->load();
-    // initial reverb values 
-    // params_.roomSize = 0.8f;
-    // params_.damping = 0.8f;
-    // params_.width = 0.5f;
-    // params_.freezeMode = 0.3f;
-    // params_.dryLevel = 0.0f;
-    // params_.wetLevel = 1.0f;
+    float reverb_amount = apvts.getRawParameterValue("REVERB")->load();
     params_.roomSize = reverb_amount;
-    params_.damping = reverb_amount;
-    params_.freezeMode = reverb_amount * 0.5f;
+    params_.damping = 0.6f - reverb_amount / 2.0f;
 
     reverb_.setParameters(params_);
     reverb_.process(contextToUse);
