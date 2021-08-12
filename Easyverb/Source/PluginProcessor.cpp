@@ -105,6 +105,14 @@ void EasyverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     reverb_.prepare(spec);
 
     mix_.prepare(spec);
+
+    // TODO: EQ the wet signal with IIR filters.
+    //float frequency = apvts.getRawParameterValue("TONE")->load();
+    //filter_ch1_.prepare(spec);
+    //filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(sampleRate, frequency, 6.0f);
+
+    //filter_ch2_.prepare(spec);
+    //filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeBandPass(sampleRate, frequency, 6.0f);
 }
 
 void EasyverbAudioProcessor::releaseResources()
@@ -160,13 +168,26 @@ void EasyverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 
     //    // ..do something to the data...
     //}
+
     auto block = juce::dsp::AudioBlock<float>(buffer);
     auto contextToUse = juce::dsp::ProcessContextReplacing<float>(block);
+
+    float reverb_amount = apvts.getRawParameterValue("MIX")->load();
+    // initial reverb values 
+    // params_.roomSize = 0.8f;
+    // params_.damping = 0.8f;
+    // params_.width = 0.5f;
+    // params_.freezeMode = 0.3f;
+    // params_.dryLevel = 0.0f;
+    // params_.wetLevel = 1.0f;
+    params_.roomSize = reverb_amount;
+    params_.damping = reverb_amount;
+    params_.freezeMode = reverb_amount * 0.5f;
 
     reverb_.setParameters(params_);
     reverb_.process(contextToUse);
 
-    mix_.setWetMixProportion(0.2f);
+    mix_.setWetMixProportion(apvts.getRawParameterValue("MIX")->load());
     mix_.mixWetSamples(block);
 }
 
@@ -187,23 +208,28 @@ void EasyverbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    auto state = apvts.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void EasyverbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName(apvts.state.getType()))
+            apvts.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout EasyverbAudioProcessor::createParameters()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
 
-    //parameters.push_back(std::make_unique<juce::AudioParameterFloat>("COMPRESS", "Compress", 0.04f, 0.45f, 0.1f));
-    //parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO", "Vibrato", 0.0f, 0.15f, 0.01f));
-    //parameters.push_back(std::make_unique<juce::AudioParameterFloat>("VIBRATO_RATE", "Rate", 0.5f, 4.0f, 2.0f));
-    //parameters.push_back(std::make_unique<juce::AudioParameterFloat>("TONE", "Tone", 320.1f, 4700.0f, 2000.0f));
-    //parameters.push_back(std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.0f, 0.5f, 0.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("REVERB", "Reverb", 0.0f, 1.0f, 0.5f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("MIX", "Mix", 0.0f, 1.0f, 0.2f));
     return { parameters.begin(), parameters.end() };
 }
 
