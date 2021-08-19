@@ -43,13 +43,16 @@ EasyverbAudioProcessorEditor::~EasyverbAudioProcessorEditor()
 void EasyverbAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (juce::Colours::azure);
+    g.fillAll (juce::Colour(0xff123456));
+    g.setColour(juce::Colours::azure);
+    g.fillRect(top_section_);
 
-    g.setColour(juce::Colour(0xff123456));
+    
+    g.setColour (juce::Colour(0xff123456));
     g.setFont(40.0f);
     g.drawFittedText("EASYVERB", getLocalBounds(), juce::Justification::centredTop, 1);
 
-    g.setColour (juce::Colour(0xff123456));
+    g.setColour(juce::Colours::azure);
     SetupSections();
     g.setFont(18.0f);
     g.drawFittedText("REVERB", reverb_text_section_, juce::Justification::left, 1);
@@ -69,6 +72,10 @@ void EasyverbAudioProcessorEditor::SetupSections()
 {
     juce::Rectangle<int> r = getLocalBounds();
     top_section_ = r.removeFromTop(50);
+    r.removeFromTop(50);
+    r.removeFromBottom(60);
+    r.removeFromLeft(100);
+    r.removeFromRight(100);
 
     constexpr int text_section_width = 70;
 
