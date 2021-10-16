@@ -9,11 +9,89 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+AnimatedComponent::AnimatedComponent( juce::Point<float> a,
+                                      juce::Point<float> b,
+                                      juce::Point<float> c)
+{
+    backgroundColor_ = juce::Colours::black;
+    shape_.addTriangle(a, b, c);
+    juce::Desktop::getInstance().addGlobalMouseListener(this);
+}
+
+AnimatedComponent::~AnimatedComponent()
+{
+    juce::Desktop::getInstance().removeGlobalMouseListener(this);
+}
+
+void AnimatedComponent::paint(juce::Graphics& g)
+{
+    //g.fillAll(juce::Colours::beige);
+    g.setColour(backgroundColor_);
+    g.fillPath(shape_);
+}
+
+void AnimatedComponent::mouseMove(const juce::MouseEvent& e)
+{
+    // Get mouse coordinates on the entire screen
+    mouse_pos_ = juce::Point<int>(e.getScreenX(), e.getScreenY());
+    // Move "origo" to component corner instead of screen corner
+    mouse_pos_ = getLocalPoint(nullptr, mouse_pos_);
+
+
+    if (shape_.contains(mouse_pos_.getX(), mouse_pos_.getY()) == true && mouse_over_shape_ == false) {
+        mouse_over_shape_ = true;
+        startTimer(FRAME_PERIOD_MS);
+    }
+    else if (shape_.contains(mouse_pos_.getX(), mouse_pos_.getY()) == false && mouse_over_shape_ == true) {
+        mouse_over_shape_ = false;
+        startTimer(FRAME_PERIOD_MS);
+    }
+    std::string s = "mouse_over_shape_ == " + std::to_string(mouse_over_shape_) + 
+                    " mouse pos: " + std::to_string(mouse_pos_.getX()) +  
+                    " ," + std::to_string(mouse_pos_.getY());
+    DBG(s);
+}
+
+void AnimatedComponent::mouseEnter(const juce::MouseEvent& e)
+{
+}
+
+void AnimatedComponent::mouseExit(const juce::MouseEvent& e)
+{
+}
+
+void AnimatedComponent::timerCallback()
+{
+    // This callback triggers a change and repaints the component
+    if (mouse_over_shape_) {
+        if (current_frame_ < max_frame_) {
+            current_frame_++;
+        }
+    }
+    else {
+        if (current_frame_ > 0) {
+            current_frame_--;
+        }
+    }
+
+    backgroundColor_ = juce::Colours::black.interpolatedWith(juce::Colours::aquamarine,
+        float(current_frame_) / float(max_frame_));
+    repaint();
+    // next frame!
+    if (current_frame_ != max_frame_) {
+        startTimer(FRAME_PERIOD_MS);
+    }
+}
+
 //==============================================================================
 EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(juce::Colours::darkgrey)
+    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(juce::Colours::darkgrey), 
+        comp(AnimatedComponent(juce::Point<float>(0.0f, 50.0f),
+                               juce::Point<float>(220.0f, 50.0f),
+                               juce::Point<float>(220.0f, 260.0f)))
 {
     constexpr int TEXT_BOX_SIZE = 25;
+    addAndMakeVisible(comp);
 
     reverb_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     reverb_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
@@ -66,6 +144,7 @@ void EasyverbAudioProcessorEditor::resized()
     SetupSections();
     reverb_slider_.setBounds(reverb_section_);
     mix_slider_.setBounds(mix_section_);
+    comp.setBounds(getLocalBounds().withSizeKeepingCentre(400, 300));  // Should be same as whole screen
 }
 
 void EasyverbAudioProcessorEditor::SetupSections()
