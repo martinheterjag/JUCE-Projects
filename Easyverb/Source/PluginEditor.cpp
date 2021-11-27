@@ -135,6 +135,11 @@ void EasyverbAudioProcessorEditor::paint (juce::Graphics& g)
     g.setFont(18.0f);
     g.drawFittedText("REVERB", reverb_text_section_, juce::Justification::left, 1);
     g.drawFittedText("DRY/WET", mix_text_section_, juce::Justification::left, 1);
+    // TODO: instead of drawing dots, use the vector of Points to create a vector of animated component triangles.
+    for (juce::Point<int> p : CAVE_FG_POINTS) {
+        juce::Rectangle<int> r(p, juce::Point<int>(p.getX() + 1, p.getY() + 1));
+        g.fillRect(r);
+    }
 }
 
 void EasyverbAudioProcessorEditor::resized()
@@ -144,6 +149,7 @@ void EasyverbAudioProcessorEditor::resized()
     SetupSections();
     reverb_slider_.setBounds(reverb_section_);
     mix_slider_.setBounds(mix_section_);
+    // TODO: replace comp with list of animated components
     comp.setBounds(getLocalBounds().withSizeKeepingCentre(400, 300));  // Should be same as whole screen
 }
 
