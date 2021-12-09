@@ -148,7 +148,8 @@ private:
     void sliderValueChanged(juce::Slider* slider) override;
     InfoButton info_button_;
 
-    AnimatedComponent comp;
+    //AnimatedComponent comp;
+    std::vector<std::shared_ptr<AnimatedComponent>> cave_foreground_;
 
     typedef std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> SliderAttatchmentPtr;
     juce::Slider reverb_slider_;

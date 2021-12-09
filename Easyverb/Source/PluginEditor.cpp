@@ -85,13 +85,21 @@ void AnimatedComponent::timerCallback()
 
 //==============================================================================
 EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(juce::Colours::darkgrey), 
-        comp(AnimatedComponent(juce::Point<float>(0.0f, 50.0f),
-                               juce::Point<float>(220.0f, 50.0f),
-                               juce::Point<float>(220.0f, 260.0f)))
+    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(juce::Colours::darkgrey)
 {
     constexpr int TEXT_BOX_SIZE = 25;
-    addAndMakeVisible(comp);
+
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        juce::Point<float>(220.0f, 50.0f),
+        juce::Point<float>(320.0f, 50.0f),
+        juce::Point<float>(320.0f, 260.0f)));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        juce::Point<float>(50.0f, 50.0f),
+        juce::Point<float>(220.0f, 50.0f),
+        juce::Point<float>(220.0f, 260.0f)));
+    for (auto &component : cave_foreground_) {
+        addAndMakeVisible(*component);
+    }
 
     reverb_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     reverb_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
@@ -149,8 +157,10 @@ void EasyverbAudioProcessorEditor::resized()
     SetupSections();
     reverb_slider_.setBounds(reverb_section_);
     mix_slider_.setBounds(mix_section_);
-    // TODO: replace comp with list of animated components
-    comp.setBounds(getLocalBounds().withSizeKeepingCentre(400, 300));  // Should be same as whole screen
+
+    for (auto component : cave_foreground_) {
+        component->setBounds(getLocalBounds().withSizeKeepingCentre(400, 300));  // Should be same as whole screen
+    }
 }
 
 void EasyverbAudioProcessorEditor::SetupSections()
