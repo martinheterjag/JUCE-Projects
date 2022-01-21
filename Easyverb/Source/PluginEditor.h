@@ -15,7 +15,7 @@
 // How many milliseconds frames per animation frame (8 ms gives 62.5 FPS)
 const int FRAME_PERIOD_MS = 16;
 
-static const std::vector<juce::Point<int>> CAVE_FG_POINTS = {
+static const std::vector<juce::Point<float>> CAVE_FG_POINTS = {
     {0, 0},
     {20, 0},
     {62, 0},
@@ -101,7 +101,6 @@ static const std::vector<juce::Point<int>> CAVE_FG_POINTS = {
     {224, 21}
 };
 
-
 class AnimatedComponent : public juce::Component, public juce::Timer
 {
 public:
@@ -127,7 +126,7 @@ private:
     juce::Point<int> mouse_pos_;
     bool mouse_over_shape_ = false;
 };
- 
+
 //==============================================================================
 /**
 */
@@ -139,11 +138,13 @@ public:
     EasyverbAudioProcessorEditor (EasyverbAudioProcessor&);
     ~EasyverbAudioProcessorEditor() override;
 
+    
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
+    void SetupCaveForeground();
     void SetupSections();
     void sliderValueChanged(juce::Slider* slider) override;
     InfoButton info_button_;

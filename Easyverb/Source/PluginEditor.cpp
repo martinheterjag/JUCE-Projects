@@ -89,14 +89,9 @@ EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcess
 {
     constexpr int TEXT_BOX_SIZE = 25;
 
-    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
-        juce::Point<float>(220.0f, 50.0f),
-        juce::Point<float>(320.0f, 50.0f),
-        juce::Point<float>(320.0f, 260.0f)));
-    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
-        juce::Point<float>(50.0f, 50.0f),
-        juce::Point<float>(220.0f, 50.0f),
-        juce::Point<float>(220.0f, 260.0f)));
+    SetupCaveForeground();
+
+    // TODO: Move down below header.
     for (auto &component : cave_foreground_) {
         addAndMakeVisible(*component);
     }
@@ -144,8 +139,8 @@ void EasyverbAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawFittedText("REVERB", reverb_text_section_, juce::Justification::left, 1);
     g.drawFittedText("DRY/WET", mix_text_section_, juce::Justification::left, 1);
     // TODO: instead of drawing dots, use the vector of Points to create a vector of animated component triangles.
-    for (juce::Point<int> p : CAVE_FG_POINTS) {
-        juce::Rectangle<int> r(p, juce::Point<int>(p.getX() + 1, p.getY() + 1));
+    for (juce::Point<float> p : CAVE_FG_POINTS) {
+        juce::Rectangle<float> r(p, juce::Point<float>(p.getX() + 1, p.getY() + 1));
         g.fillRect(r);
     }
 }
@@ -161,6 +156,18 @@ void EasyverbAudioProcessorEditor::resized()
     for (auto component : cave_foreground_) {
         component->setBounds(getLocalBounds().withSizeKeepingCentre(400, 300));  // Should be same as whole screen
     }
+}
+
+void EasyverbAudioProcessorEditor::SetupCaveForeground() {
+    // TODO:Create a constant public vector instead of this datamember and init function...
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[0],
+        CAVE_FG_POINTS[1],
+        CAVE_FG_POINTS[6]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[1],
+        CAVE_FG_POINTS[2],
+        CAVE_FG_POINTS[6]));
 }
 
 void EasyverbAudioProcessorEditor::SetupSections()
