@@ -91,7 +91,6 @@ EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcess
 
     SetupCaveForeground();
 
-    // TODO: Move down below header.
     for (auto &component : cave_foreground_) {
         addAndMakeVisible(*component);
     }
@@ -173,7 +172,7 @@ void EasyverbAudioProcessorEditor::SetupCaveForeground() {
 void EasyverbAudioProcessorEditor::SetupSections()
 {
     juce::Rectangle<int> r = getLocalBounds();
-    top_section_ = r.removeFromTop(50);
+    top_section_ = r.removeFromTop(TOP_SECTION_HEIGHT);
     r.removeFromTop(50);
     r.removeFromBottom(60);
     r.removeFromLeft(100);
