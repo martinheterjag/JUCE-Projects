@@ -137,10 +137,13 @@ void EasyverbAudioProcessorEditor::paint (juce::Graphics& g)
     g.setFont(18.0f);
     g.drawFittedText("REVERB", reverb_text_section_, juce::Justification::left, 1);
     g.drawFittedText("DRY/WET", mix_text_section_, juce::Justification::left, 1);
-    // TODO: instead of drawing dots, use the vector of Points to create a vector of animated component triangles.
+
+    int i = 0;
     for (juce::Point<float> p : CAVE_FG_POINTS) {
-        juce::Rectangle<float> r(p, juce::Point<float>(p.getX() + 1, p.getY() + 1));
-        g.fillRect(r);
+        juce::Rectangle<float> r(p, juce::Point<float>(p.getX() + 10, p.getY() + 10));
+        g.setFont(10.0f);
+        g.drawText(std::to_string(i), r, juce::Justification::left, 1);
+        ++i;
     }
 }
 
