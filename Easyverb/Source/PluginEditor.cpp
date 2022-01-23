@@ -25,7 +25,6 @@ AnimatedComponent::~AnimatedComponent()
 
 void AnimatedComponent::paint(juce::Graphics& g)
 {
-    //g.fillAll(juce::Colours::beige);
     g.setColour(backgroundColor_);
     g.fillPath(shape_);
 }
@@ -65,7 +64,7 @@ void AnimatedComponent::timerCallback()
     // This callback triggers a change and repaints the component
     if (mouse_over_shape_) {
         if (current_frame_ < max_frame_) {
-            current_frame_++;
+            current_frame_ += 8;
         }
     }
     else {
@@ -170,6 +169,54 @@ void EasyverbAudioProcessorEditor::SetupCaveForeground() {
         CAVE_FG_POINTS[1],
         CAVE_FG_POINTS[2],
         CAVE_FG_POINTS[6]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[2],
+        CAVE_FG_POINTS[3],
+        CAVE_FG_POINTS[10]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[3],
+        CAVE_FG_POINTS[10],
+        CAVE_FG_POINTS[12]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[3],
+        CAVE_FG_POINTS[4],
+        CAVE_FG_POINTS[12]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[12],
+        CAVE_FG_POINTS[4],
+        CAVE_FG_POINTS[13]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[6],
+        CAVE_FG_POINTS[2],
+        CAVE_FG_POINTS[9]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[2],
+        CAVE_FG_POINTS[9],
+        CAVE_FG_POINTS[10]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[6],
+        CAVE_FG_POINTS[9],
+        CAVE_FG_POINTS[8]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[0],
+        CAVE_FG_POINTS[6],
+        CAVE_FG_POINTS[5]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[5],
+        CAVE_FG_POINTS[6],
+        CAVE_FG_POINTS[7]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[7],
+        CAVE_FG_POINTS[8],
+        CAVE_FG_POINTS[46]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[7],
+        CAVE_FG_POINTS[45],
+        CAVE_FG_POINTS[46]));
+    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+        CAVE_FG_POINTS[46],
+        CAVE_FG_POINTS[48],
+        CAVE_FG_POINTS[45]));
 }
 
 void EasyverbAudioProcessorEditor::SetupSections()

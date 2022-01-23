@@ -122,7 +122,7 @@ private:
     // Data members
     juce::Colour backgroundColor_{0xFFFF0000};
     int current_frame_{ 0 };
-    int max_frame_{ 25 };
+    int max_frame_{ 100 };
     juce::Path shape_;
     juce::Point<int> mouse_pos_;
     bool mouse_over_shape_ = false;
