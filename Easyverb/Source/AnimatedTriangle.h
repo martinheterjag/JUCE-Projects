@@ -32,7 +32,8 @@ public:
 
 private:
     // Data members
-    juce::Colour backgroundColor_{ 0xFFFF0000 };
+    juce::Colour triangle_colour_;
+    juce::Colour animation_colour_;
     int current_frame_{ 0 };
     int max_frame_{ 500 };
     juce::Path shape_;

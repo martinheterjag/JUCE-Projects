@@ -10,12 +10,15 @@
 
 #include "AnimatedTriangle.h"
 
+const juce::Colour BASE_COLOUR = juce::Colours::darkorange;
+const juce::Colour ANIMATED_COLOUR = juce::Colours::peachpuff;
+
 
 AnimatedTriangle::AnimatedTriangle(juce::Point<float> a,
     juce::Point<float> b,
     juce::Point<float> c)
 {
-    backgroundColor_ = juce::Colours::darkorange;
+    triangle_colour_ = BASE_COLOUR;
     shape_.addTriangle(a, b, c);
     juce::Desktop::getInstance().addGlobalMouseListener(this);
 }
@@ -27,7 +30,7 @@ AnimatedTriangle::~AnimatedTriangle()
 
 void AnimatedTriangle::paint(juce::Graphics& g)
 {
-    g.setColour(backgroundColor_);
+    g.setColour(triangle_colour_);
     g.fillPath(shape_);
 }
 
@@ -62,19 +65,17 @@ void AnimatedTriangle::timerCallback()
     // This callback triggers a change and repaints the component
     if (mouse_over_shape_) {
         if (current_frame_ < max_frame_) {
-            // TODO: fix some cool algorithm for
             current_frame_ += 15;
             current_frame_ *= 1.8;
-            // current_frame_ = 500 + (current_frame_ * (0 - 1));
         }
     }
     else {
         if (current_frame_ > 0) {
-            current_frame_ /= 1.012;
+            current_frame_ /= 1.014;
         }
     }
 
-    backgroundColor_ = juce::Colours::darkorange.interpolatedWith(juce::Colours::peachpuff,
+    triangle_colour_ = BASE_COLOUR.interpolatedWith(ANIMATED_COLOUR,
         float(current_frame_) / float(max_frame_));
     repaint();
     // next frame!
