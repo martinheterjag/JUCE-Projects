@@ -85,10 +85,14 @@ void EasyverbAudioProcessorEditor::SetupTrianglePattern() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             if (i > 2 && i < 5 && j > 1 && j < 5) {
-                // dont draw in middle of the window to make room for sliders
+                // dont draw in middle of the window to make room for knobs
                 continue;
             }
+            // Logic in if statement is to reverse triangle orientation depending on where
+            // in the main window it is, every second row is flipped horisontaly (j % 2) and on right
+            // side of screen they are flipped vertically (i >= 4)...
             if (j % 2 == 0 && i < 4 || j % 2 == 1 && i >= 4) {
+                // ... also every second triangle is flipped on each row
                 if (i % 2 == 0) {
                     triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
                         juce::Point<float>(i * component_width, 
@@ -108,6 +112,7 @@ void EasyverbAudioProcessorEditor::SetupTrianglePattern() {
                                            (j + 1) * component_height + TOP_SECTION_HEIGHT)));
                 }
             } else {
+                // ... also every second triangle is flipped on each row
                 if (i % 2 == 0) {
                     triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
                         juce::Point<float>(i * component_width, 
