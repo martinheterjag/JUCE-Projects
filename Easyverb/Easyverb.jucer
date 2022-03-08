@@ -12,6 +12,10 @@
         <FILE id="nevJiQ" name="InfoButton.cpp" compile="1" resource="0" file="../Common/InfoButton.cpp"/>
         <FILE id="cXH0H2" name="InfoButton.h" compile="0" resource="0" file="../Common/InfoButton.h"/>
       </GROUP>
+      <FILE id="tCPuXW" name="AnimatedTriangle.h" compile="0" resource="0"
+            file="Source/AnimatedTriangle.h"/>
+      <FILE id="g8dZmY" name="AnimatedTriangle.cpp" compile="1" resource="0"
+            file="Source/AnimatedTriangle.cpp"/>
       <FILE id="TGGX1R" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="F2FK5d" name="PluginProcessor.h" compile="0" resource="0"

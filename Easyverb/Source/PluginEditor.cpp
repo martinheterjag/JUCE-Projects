@@ -6,80 +6,9 @@
   ==============================================================================
 */
 
+#include "AnimatedTriangle.h"
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-
-AnimatedComponent::AnimatedComponent( juce::Point<float> a,
-                                      juce::Point<float> b,
-                                      juce::Point<float> c)
-{
-    backgroundColor_ = juce::Colours::darkorange;
-    shape_.addTriangle(a, b, c);
-    juce::Desktop::getInstance().addGlobalMouseListener(this);
-}
-
-AnimatedComponent::~AnimatedComponent()
-{
-    juce::Desktop::getInstance().removeGlobalMouseListener(this);
-}
-
-void AnimatedComponent::paint(juce::Graphics& g)
-{
-    g.setColour(backgroundColor_);
-    g.fillPath(shape_);
-}
-
-void AnimatedComponent::mouseMove(const juce::MouseEvent& e)
-{
-    // Get mouse coordinates on the entire screen
-    mouse_pos_ = juce::Point<int>(e.getScreenX(), e.getScreenY());
-    // Move "origo" to component corner instead of screen corner
-    mouse_pos_ = getLocalPoint(nullptr, mouse_pos_);
-
-
-    if (shape_.contains(mouse_pos_.getX(), mouse_pos_.getY()) == true && mouse_over_shape_ == false) {
-        mouse_over_shape_ = true;
-        startTimer(FRAME_PERIOD_MS);
-    }
-    else if (shape_.contains(mouse_pos_.getX(), mouse_pos_.getY()) == false && mouse_over_shape_ == true) {
-        mouse_over_shape_ = false;
-        startTimer(FRAME_PERIOD_MS);
-    }
-}
-
-void AnimatedComponent::mouseEnter(const juce::MouseEvent& e)
-{
-}
-
-void AnimatedComponent::mouseExit(const juce::MouseEvent& e)
-{
-}
-
-void AnimatedComponent::timerCallback()
-{
-    // This callback triggers a change and repaints the component
-    if (mouse_over_shape_) {
-        if (current_frame_ < max_frame_) {
-            // TODO: fix some cool algorithm for
-            current_frame_ += 15;
-            current_frame_*= 1.8;
-            // current_frame_ = 500 + (current_frame_ * (0 - 1));
-        }
-    }
-    else {
-        if (current_frame_ > 0) {
-            current_frame_ /= 1.012;
-        }
-    }
-
-    backgroundColor_ = juce::Colours::darkorange.interpolatedWith(juce::Colours::peachpuff,
-        float(current_frame_) / float(max_frame_));
-    repaint();
-    // next frame!
-    if (current_frame_ != max_frame_) {
-        startTimer(FRAME_PERIOD_MS);
-    }
-}
 
 //==============================================================================
 EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcessor& p)
@@ -87,12 +16,13 @@ EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcess
 {
     constexpr int TEXT_BOX_SIZE = 25;
 
-    SetupCaveForeground();
+    SetupTrianglePattern();
 
-    for (auto &component : cave_foreground_) {
+    for (auto &component : triangle_pattern_) {
         addAndMakeVisible(*component);
     }
 
+    reverb_slider_.setColour(juce::Slider::thumbColourId, juce::Colours::chocolate);
     reverb_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     reverb_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
     reverb_slider_.addListener(this);
@@ -101,6 +31,7 @@ EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcess
     reverb_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (audioProcessor.apvts, "REVERB", reverb_slider_);
 
+    mix_slider_.setColour(juce::Slider::thumbColourId, juce::Colours::chocolate);
     mix_slider_.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     mix_slider_.setTextBoxStyle(juce::Slider::NoTextBox, true, TEXT_BOX_SIZE, TEXT_BOX_SIZE);
     mix_slider_.addListener(this);
@@ -126,13 +57,13 @@ void EasyverbAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillRect(top_section_);
 
     
-    g.setColour (juce::Colour(0xff123456));
-    g.setFont(40.0f);
+    g.setColour (juce::Colour(juce::Colours::chocolate));
+    g.setFont(juce::Font(40.0f, juce::Font::bold));
     g.drawFittedText("EASYVERB", getLocalBounds(), juce::Justification::centredTop, 1);
 
     g.setColour(juce::Colours::darkorange);
     SetupSections();
-    g.setFont(18.0f);
+    g.setFont(juce::Font(18.0f));
     g.drawFittedText("REVERB", reverb_text_section_, juce::Justification::centred, 1);
     g.drawFittedText("DRY/WET", mix_text_section_, juce::Justification::centred, 1);
 }
@@ -145,23 +76,27 @@ void EasyverbAudioProcessorEditor::resized()
     reverb_slider_.setBounds(reverb_section_);
     mix_slider_.setBounds(mix_section_);
 
-    for (auto component : cave_foreground_) {
+    for (auto &component : triangle_pattern_) {
         component->setBounds(getLocalBounds().withSizeKeepingCentre(400, 400 + TOP_SECTION_HEIGHT));  // Should be same as whole screen
     }
 }
 
-void EasyverbAudioProcessorEditor::SetupCaveForeground() {
+void EasyverbAudioProcessorEditor::SetupTrianglePattern() {
     const int component_width = 50;
     const int component_height = 50;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             if (i > 2 && i < 5 && j > 1 && j < 5) {
-                // dont draw in middle of the window to make room for sliders
+                // dont draw in middle of the window to make room for knobs
                 continue;
             }
+            // Logic in if statement is to reverse triangle orientation depending on where
+            // in the main window it is, every second row is flipped horisontaly (j % 2) and on right
+            // side of screen they are flipped vertically (i >= 4)...
             if (j % 2 == 0 && i < 4 || j % 2 == 1 && i >= 4) {
+                // ... also every second triangle is flipped on each row
                 if (i % 2 == 0) {
-                    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+                    triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
                         juce::Point<float>(i * component_width, 
                                            j * component_height + TOP_SECTION_HEIGHT),
                         juce::Point<float>((i + 1) * component_width, 
@@ -170,7 +105,7 @@ void EasyverbAudioProcessorEditor::SetupCaveForeground() {
                                            (j + 1) * component_height + TOP_SECTION_HEIGHT)));
                 }
                 else {
-                    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+                    triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
                         juce::Point<float>(i * component_width, 
                                            j * component_height + TOP_SECTION_HEIGHT),
                         juce::Point<float>((i + 1) * component_width, 
@@ -179,8 +114,9 @@ void EasyverbAudioProcessorEditor::SetupCaveForeground() {
                                            (j + 1) * component_height + TOP_SECTION_HEIGHT)));
                 }
             } else {
+                // ... also every second triangle is flipped on each row
                 if (i % 2 == 0) {
-                    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+                    triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
                         juce::Point<float>(i * component_width, 
                                            j * component_height + TOP_SECTION_HEIGHT),
                         juce::Point<float>((i + 1) * component_width, 
@@ -189,7 +125,7 @@ void EasyverbAudioProcessorEditor::SetupCaveForeground() {
                                            (j + 1) * component_height + TOP_SECTION_HEIGHT)));
                 }
                 else {
-                    cave_foreground_.push_back(std::make_unique<AnimatedComponent>(
+                    triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
                         juce::Point<float>((i + 1) * component_width, 
                                            j * component_height + TOP_SECTION_HEIGHT),
                         juce::Point<float>((i + 1) * component_width, 
