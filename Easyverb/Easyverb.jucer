@@ -5,7 +5,8 @@
               companyName="Martinheterjag" companyCopyright="Copyright (C) Martin Eriksson"
               companyWebsite="martinheterjag.com" companyEmail="martinheterjag@msn.com"
               pluginFormats="buildVST3" pluginManufacturer="Martinheterjag"
-              pluginVST3Category="Fx,Reverb" headerPath="D:\JUCE\projects\JUCE-Projects\Common">
+              pluginVST3Category="Fx,Reverb" headerPath="D:\JUCE\projects\JUCE-Projects\Common"
+              version="1.0.0">
   <MAINGROUP id="jMbT1E" name="Easyverb">
     <GROUP id="{B30C839C-3403-055F-F717-E4016D2C897E}" name="Source">
       <GROUP id="{F358ED89-3CB0-916D-CC61-AF62A4E7800C}" name="Common">
