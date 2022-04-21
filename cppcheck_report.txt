@@ -1,0 +1,191 @@
+Common/InfoButton.h:11:2: style: Class 'InfoButton' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+ InfoButton(juce::Colour color);
+ ^
+Common/InfoButton.cpp:3:37: style:inconclusive: Function 'InfoButton' argument 1 names different: declaration 'color' definition 'colour'. [funcArgNamesDifferent]
+InfoButton::InfoButton(juce::Colour colour)
+                                    ^
+Common/InfoButton.h:11:26: note: Function 'InfoButton' argument 1 names different: declaration 'color' definition 'colour'.
+ InfoButton(juce::Colour color);
+                         ^
+Common/InfoButton.cpp:3:37: note: Function 'InfoButton' argument 1 names different: declaration 'color' definition 'colour'.
+InfoButton::InfoButton(juce::Colour colour)
+                                    ^
+Easyverb/Source/AnimatedTriangle.h:23:5: warning:inconclusive: Member variable 'AnimatedTriangle::triangle_colour_' is not assigned in the copy constructor. Should it be copied? [uninitMemberVar]
+    AnimatedTriangle(const AnimatedTriangle&&) {}
+    ^
+Easyverb/Source/AnimatedTriangle.h:23:5: warning:inconclusive: Member variable 'AnimatedTriangle::animation_colour_' is not assigned in the copy constructor. Should it be copied? [uninitMemberVar]
+    AnimatedTriangle(const AnimatedTriangle&&) {}
+    ^
+Easyverb/Source/AnimatedTriangle.h:23:5: warning:inconclusive: Member variable 'AnimatedTriangle::shape_' is not assigned in the copy constructor. Should it be copied? [uninitMemberVar]
+    AnimatedTriangle(const AnimatedTriangle&&) {}
+    ^
+Easyverb/Source/AnimatedTriangle.h:23:5: warning:inconclusive: Member variable 'AnimatedTriangle::mouse_pos_' is not assigned in the copy constructor. Should it be copied? [uninitMemberVar]
+    AnimatedTriangle(const AnimatedTriangle&&) {}
+    ^
+Easyverb/Source/PluginEditor.h:38:16: style:inconclusive: Member variable 'EasyverbAudioProcessorEditor::info_button_' is in the wrong place in the initializer list. [initializerList]
+    InfoButton info_button_;
+               ^
+Easyverb/Source/PluginEditor.cpp:15:54: note: Member variable 'EasyverbAudioProcessorEditor::info_button_' is in the wrong place in the initializer list.
+    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(juce::Colours::darkgrey)
+                                                     ^
+Easyverb/Source/PluginEditor.h:38:16: note: Member variable 'EasyverbAudioProcessorEditor::info_button_' is in the wrong place in the initializer list.
+    InfoButton info_button_;
+               ^
+Easyverb/Source/PluginEditor.h:26:5: style: Class 'EasyverbAudioProcessorEditor' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    EasyverbAudioProcessorEditor (EasyverbAudioProcessor&);
+    ^
+Easyverb/Source/PluginProcessor.cpp:234:12: error:inconclusive: Returning object that points to local variable 'parameters' that will be invalid when returning. [returnDanglingLifetime]
+    return { parameters.begin(), parameters.end() };
+           ^
+Easyverb/Source/PluginProcessor.cpp:234:14: note: Iterator to container is created here.
+    return { parameters.begin(), parameters.end() };
+             ^
+Easyverb/Source/PluginProcessor.cpp:234:30: note: Passed to initializer list.
+    return { parameters.begin(), parameters.end() };
+                             ^
+Easyverb/Source/PluginProcessor.cpp:230:62: note: Variable created here.
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+                                                             ^
+Easyverb/Source/PluginProcessor.cpp:234:12: note: Returning object that points to local variable 'parameters' that will be invalid when returning.
+    return { parameters.begin(), parameters.end() };
+           ^
+Gramophony/Source/PluginEditor.h:36:16: style:inconclusive: Member variable 'GramophonyAudioProcessorEditor::info_button_' is in the wrong place in the initializer list. [initializerList]
+    InfoButton info_button_;
+               ^
+Gramophony/Source/PluginEditor.cpp:16:54: note: Member variable 'GramophonyAudioProcessorEditor::info_button_' is in the wrong place in the initializer list.
+    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(juce::Colours::darkgrey)
+                                                     ^
+Gramophony/Source/PluginEditor.h:36:16: note: Member variable 'GramophonyAudioProcessorEditor::info_button_' is in the wrong place in the initializer list.
+    InfoButton info_button_;
+               ^
+Gramophony/Source/PluginEditor.h:22:5: style: Class 'GramophonyAudioProcessorEditor' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    GramophonyAudioProcessorEditor (GramophonyAudioProcessor&);
+    ^
+Gramophony/Source/PluginProcessor.cpp:247:12: error:inconclusive: Returning object that points to local variable 'parameters' that will be invalid when returning. [returnDanglingLifetime]
+    return { parameters.begin(), parameters.end() };
+           ^
+Gramophony/Source/PluginProcessor.cpp:247:14: note: Iterator to container is created here.
+    return { parameters.begin(), parameters.end() };
+             ^
+Gramophony/Source/PluginProcessor.cpp:247:30: note: Passed to initializer list.
+    return { parameters.begin(), parameters.end() };
+                             ^
+Gramophony/Source/PluginProcessor.cpp:240:62: note: Variable created here.
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+                                                             ^
+Gramophony/Source/PluginProcessor.cpp:247:12: note: Returning object that points to local variable 'parameters' that will be invalid when returning.
+    return { parameters.begin(), parameters.end() };
+           ^
+WaveFolder/Source/PluginEditor.h:30:16: style:inconclusive: Member variable 'WaveFolderAudioProcessorEditor::info_button_' is in the wrong place in the initializer list. [initializerList]
+    InfoButton info_button_;
+               ^
+WaveFolder/Source/PluginEditor.cpp:14:54: note: Member variable 'WaveFolderAudioProcessorEditor::info_button_' is in the wrong place in the initializer list.
+    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId))
+                                                     ^
+WaveFolder/Source/PluginEditor.h:30:16: note: Member variable 'WaveFolderAudioProcessorEditor::info_button_' is in the wrong place in the initializer list.
+    InfoButton info_button_;
+               ^
+WaveFolder/Source/PluginEditor.h:21:5: style: Class 'WaveFolderAudioProcessorEditor' has a constructor with 1 argument that is not explicit. [noExplicitConstructor]
+    WaveFolderAudioProcessorEditor (WaveFolderAudioProcessor&);
+    ^
+WaveFolder/Source/PluginProcessor.cpp:258:12: error:inconclusive: Returning object that points to local variable 'parameters' that will be invalid when returning. [returnDanglingLifetime]
+    return { parameters.begin(), parameters.end() };
+           ^
+WaveFolder/Source/PluginProcessor.cpp:258:14: note: Iterator to container is created here.
+    return { parameters.begin(), parameters.end() };
+             ^
+WaveFolder/Source/PluginProcessor.cpp:258:30: note: Passed to initializer list.
+    return { parameters.begin(), parameters.end() };
+                             ^
+WaveFolder/Source/PluginProcessor.cpp:245:62: note: Variable created here.
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+                                                             ^
+WaveFolder/Source/PluginProcessor.cpp:258:12: note: Returning object that points to local variable 'parameters' that will be invalid when returning.
+    return { parameters.begin(), parameters.end() };
+           ^
+Easyverb/Source/PluginProcessor.cpp:44:0: style: The function 'acceptsMidi' is never used. [unusedFunction]
+
+^
+Common/InfoButton.cpp:42:0: style: The function 'buttonClicked' is never used. [unusedFunction]
+
+^
+Common/InfoButton.cpp:30:0: style: The function 'buttonStateChanged' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:96:0: style: The function 'changeProgramName' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:201:0: style: The function 'createEditor' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:239:0: style: The function 'createPluginFilter' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:82:0: style: The function 'getCurrentProgram' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:39:0: style: The function 'getName' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:76:0: style: The function 'getNumPrograms' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:91:0: style: The function 'getProgramName' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:207:0: style: The function 'getStateInformation' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:71:0: style: The function 'getTailLengthSeconds' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:196:0: style: The function 'hasEditor' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:127:0: style: The function 'isBusesLayoutSupported' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:62:0: style: The function 'isMidiEffect' is never used. [unusedFunction]
+
+^
+Easyverb/Source/AnimatedTriangle.cpp:55:0: style: The function 'mouseEnter' is never used. [unusedFunction]
+
+^
+Easyverb/Source/AnimatedTriangle.cpp:59:0: style: The function 'mouseExit' is never used. [unusedFunction]
+
+^
+Easyverb/Source/AnimatedTriangle.cpp:37:0: style: The function 'mouseMove' is never used. [unusedFunction]
+
+^
+Easyverb/Source/AnimatedTriangle.cpp:31:0: style: The function 'paint' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:101:0: style: The function 'prepareToPlay' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:150:0: style: The function 'processBlock' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:53:0: style: The function 'producesMidi' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:120:0: style: The function 'releaseResources' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginEditor.cpp:71:0: style: The function 'resized' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:87:0: style: The function 'setCurrentProgram' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginProcessor.cpp:217:0: style: The function 'setStateInformation' is never used. [unusedFunction]
+
+^
+Easyverb/Source/PluginEditor.cpp:162:0: style: The function 'sliderValueChanged' is never used. [unusedFunction]
+
+^
+Easyverb/Source/AnimatedTriangle.cpp:63:0: style: The function 'timerCallback' is never used. [unusedFunction]
+
+^
+nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingIncludeSystem]
+
