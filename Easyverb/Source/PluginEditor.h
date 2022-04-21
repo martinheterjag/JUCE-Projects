@@ -23,7 +23,7 @@ class EasyverbAudioProcessorEditor  : public juce::AudioProcessorEditor,
 
 {
 public:
-    EasyverbAudioProcessorEditor (EasyverbAudioProcessor&);
+    explicit EasyverbAudioProcessorEditor (EasyverbAudioProcessor&);
     ~EasyverbAudioProcessorEditor() override;
 
     
