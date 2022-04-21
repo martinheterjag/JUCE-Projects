@@ -37,4 +37,7 @@ jobs:
           
       - name: cppcheck-action
         uses: deep5050/cppcheck-action@v3.0
+        run: |
+          cppcheck . 2> err.txt
+          cat err.txt && rm err.txt
 
