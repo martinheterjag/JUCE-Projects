@@ -8,7 +8,7 @@
 // 3) In resized() function set boundry of the public data members button and info_text
 class InfoButton  : public juce::Button::Listener {
 public:
-	InfoButton(juce::Colour color);
+	explicit InfoButton(juce::Colour colour);
 	~InfoButton();
 	void addToEditor(juce::AudioProcessorEditor* editor);
 	void buttonStateChanged(juce::Button* b) override;

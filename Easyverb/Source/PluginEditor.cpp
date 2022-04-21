@@ -12,7 +12,7 @@
 
 //==============================================================================
 EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), info_button_(juce::Colours::darkgrey)
+    : AudioProcessorEditor (&p), info_button_ (juce::Colours::darkgrey), audioProcessor (p)
 {
     constexpr int TEXT_BOX_SIZE = 25;
 
