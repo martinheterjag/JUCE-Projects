@@ -84,35 +84,36 @@ int EasyverbAudioProcessor::getCurrentProgram()
     return 0;
 }
 
-void EasyverbAudioProcessor::setCurrentProgram (int index)
+void EasyverbAudioProcessor::setCurrentProgram (int /*index*/)
 {
 }
 
-const juce::String EasyverbAudioProcessor::getProgramName (int index)
+const juce::String EasyverbAudioProcessor::getProgramName (int /*index*/)
 {
     return {};
 }
 
-void EasyverbAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void EasyverbAudioProcessor::changeProgramName (int /*index*/, const juce::String& /*newName*/)
 {
 }
 
 //==============================================================================
 void EasyverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    juce::dsp::ProcessSpec spec = { sampleRate, samplesPerBlock, getMainBusNumOutputChannels() };
+    juce::dsp::ProcessSpec spec = { sampleRate, static_cast<juce::uint32>(samplesPerBlock), 
+                                    static_cast<juce::uint32>(getMainBusNumOutputChannels()) };
     
     reverb_.prepare(spec);
 
     mix_.prepare(spec);
 
     filter_ch1_.prepare(spec);
-    filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1200, 2.1f, 0.6);
+    filter_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1200.0f, 2.1f, 0.6f);
     hp_ch1_.prepare(spec);
-    hp_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 110.0, 3.0f);
+    hp_ch1_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 110.0f, 3.0f);
 
     filter_ch2_.prepare(spec);
-    filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1194, 2.0f, 0.6);
+    filter_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1194.0f, 2.0f, 0.6f);
     hp_ch2_.prepare(spec);
     hp_ch2_.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, 110.0, 3.1f);
 }
@@ -147,7 +148,7 @@ bool EasyverbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts)
 }
 #endif
 
-void EasyverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void EasyverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& /*midiMessages*/)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -164,7 +165,7 @@ void EasyverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 
     mix_.pushDrySamples(buffer);
 
-    for (float sample = 0; sample < buffer.getNumSamples(); ++sample) {
+    for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
             if (channel == 0) {

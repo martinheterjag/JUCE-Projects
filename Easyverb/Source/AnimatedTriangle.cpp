@@ -37,7 +37,7 @@ void AnimatedTriangle::paint(juce::Graphics& g)
 void AnimatedTriangle::mouseMove(const juce::MouseEvent& e)
 {
     // Get mouse coordinates on the entire screen
-    mouse_pos_ = juce::Point<int>(e.getScreenX(), e.getScreenY());
+    mouse_pos_ = juce::Point<float>(static_cast<float>(e.getScreenX()), static_cast<float>(e.getScreenY()));
     // Move "origo" to component corner instead of screen corner
     mouse_pos_ = getLocalPoint(nullptr, mouse_pos_);
 
@@ -52,11 +52,11 @@ void AnimatedTriangle::mouseMove(const juce::MouseEvent& e)
     }
 }
 
-void AnimatedTriangle::mouseEnter(const juce::MouseEvent& e)
+void AnimatedTriangle::mouseEnter(const juce::MouseEvent& /*e*/)
 {
 }
 
-void AnimatedTriangle::mouseExit(const juce::MouseEvent& e)
+void AnimatedTriangle::mouseExit(const juce::MouseEvent& /*e*/)
 {
 }
 
@@ -66,12 +66,12 @@ void AnimatedTriangle::timerCallback()
     if (mouse_over_shape_) {
         if (current_frame_ < max_frame_) {
             current_frame_ += 15;
-            current_frame_ *= 1.8;
+            current_frame_ = static_cast<int>(current_frame_ * 1.8);
         }
     }
     else {
         if (current_frame_ > 0) {
-            current_frame_ /= 1.014;
+            current_frame_ = static_cast<int>(current_frame_ / 1.014);
         }
     }
 

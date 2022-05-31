@@ -37,6 +37,6 @@ private:
     int current_frame_{ 0 };
     int max_frame_{ 500 };
     juce::Path shape_;
-    juce::Point<int> mouse_pos_;
+    juce::Point<float> mouse_pos_;
     bool mouse_over_shape_ = false;
 };

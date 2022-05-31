@@ -97,41 +97,41 @@ void EasyverbAudioProcessorEditor::SetupTrianglePattern() {
                 // ... also every second triangle is flipped on each row
                 if (i % 2 == 0) {
                     triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
-                        juce::Point<float>(i * component_width, 
-                                           j * component_height + TOP_SECTION_HEIGHT),
-                        juce::Point<float>((i + 1) * component_width, 
-                                           (j + 1) * component_height + TOP_SECTION_HEIGHT),
-                        juce::Point<float>(i * component_width, 
-                                           (j + 1) * component_height + TOP_SECTION_HEIGHT)));
+                        juce::Point<float>(static_cast<float>(i * component_width), 
+                                           static_cast<float>(j * component_height + TOP_SECTION_HEIGHT)),
+                        juce::Point<float>(static_cast<float>((i + 1) * component_width),
+                                           static_cast<float>((j + 1) * component_height + TOP_SECTION_HEIGHT)),
+                        juce::Point<float>(static_cast<float>(i * component_width),
+                                           static_cast<float>((j + 1) * component_height + TOP_SECTION_HEIGHT))));
                 }
                 else {
                     triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
-                        juce::Point<float>(i * component_width, 
-                                           j * component_height + TOP_SECTION_HEIGHT),
-                        juce::Point<float>((i + 1) * component_width, 
-                                           j * component_height + TOP_SECTION_HEIGHT),
-                        juce::Point<float>((i + 1) * component_width, 
-                                           (j + 1) * component_height + TOP_SECTION_HEIGHT)));
+                        juce::Point<float>(static_cast<float>(i * component_width),
+                                           static_cast<float>(j * component_height + TOP_SECTION_HEIGHT)),
+                        juce::Point<float>(static_cast<float>((i + 1) * component_width),
+                                           static_cast<float>(j * component_height + TOP_SECTION_HEIGHT)),
+                        juce::Point<float>(static_cast<float>((i + 1) * component_width),
+                                           static_cast<float>((j + 1) * component_height + TOP_SECTION_HEIGHT))));
                 }
             } else {
                 // ... also every second triangle is flipped on each row
                 if (i % 2 == 0) {
                     triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
-                        juce::Point<float>(i * component_width, 
-                                           j * component_height + TOP_SECTION_HEIGHT),
-                        juce::Point<float>((i + 1) * component_width, 
-                                           j * component_height + TOP_SECTION_HEIGHT),
-                        juce::Point<float>(i * component_width, 
-                                           (j + 1) * component_height + TOP_SECTION_HEIGHT)));
+                        juce::Point<float>(static_cast<float>(i * component_width),
+                                           static_cast<float>(j * component_height + TOP_SECTION_HEIGHT)),
+                        juce::Point<float>(static_cast<float>((i + 1) * component_width),
+                                           static_cast<float>(j * component_height + TOP_SECTION_HEIGHT)),
+                        juce::Point<float>(static_cast<float>(i * component_width),
+                                           static_cast<float>((j + 1) * component_height + TOP_SECTION_HEIGHT))));
                 }
                 else {
                     triangle_pattern_.push_back(std::make_unique<AnimatedTriangle>(
-                        juce::Point<float>((i + 1) * component_width, 
-                                           j * component_height + TOP_SECTION_HEIGHT),
-                        juce::Point<float>((i + 1) * component_width, 
-                                           (j + 1) * component_height + TOP_SECTION_HEIGHT),
-                        juce::Point<float>(i * component_width, 
-                                           (j + 1) * component_height + TOP_SECTION_HEIGHT)));
+                        juce::Point<float>(static_cast<float>((i + 1) * component_width),
+                                           static_cast<float>(j * component_height + TOP_SECTION_HEIGHT)),
+                        juce::Point<float>(static_cast<float>((i + 1) * component_width),
+                                           static_cast<float>((j + 1) * component_height + TOP_SECTION_HEIGHT)),
+                        juce::Point<float>(static_cast<float>(i * component_width),
+                                           static_cast<float>((j + 1) * component_height + TOP_SECTION_HEIGHT))));
                 }
             }
         }
@@ -159,7 +159,7 @@ void EasyverbAudioProcessorEditor::SetupSections()
     mix_text_section_ = mix_section_.removeFromTop(text_section_height);
 }
 
-void EasyverbAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
+void EasyverbAudioProcessorEditor::sliderValueChanged(juce::Slider* /*slider*/)
 {
     repaint();
 }
