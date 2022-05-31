@@ -18,7 +18,7 @@ EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcess
 
     SetupTrianglePattern();
 
-    for (auto &component : triangle_pattern_) {
+    for (const auto &component : triangle_pattern_) {
         addAndMakeVisible(*component);
     }
 

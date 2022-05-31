@@ -18,7 +18,7 @@
 class WaveFolderAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    WaveFolderAudioProcessorEditor (WaveFolderAudioProcessor&);
+    explicit WaveFolderAudioProcessorEditor (WaveFolderAudioProcessor&);
     ~WaveFolderAudioProcessorEditor() override;
 
     //==============================================================================
