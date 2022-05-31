@@ -10,6 +10,9 @@
 #include "AnimatedTriangle.h"
 #include "PluginProcessor.h"
 
+constexpr int WINDOW_WIDTH = 400;
+constexpr int WINDOW_HEIGHT = 400 + TOP_SECTION_HEIGHT;
+
 //==============================================================================
 EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcessor& p)
     : AudioProcessorEditor (&p), info_button_ (juce::Colours::darkgrey), audioProcessor (p)
@@ -40,7 +43,7 @@ EasyverbAudioProcessorEditor::EasyverbAudioProcessorEditor (EasyverbAudioProcess
     mix_slider_attachment_ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "MIX", mix_slider_);
 
     info_button_.addToEditor (this);
-    setSize (400, 400 + TOP_SECTION_HEIGHT);
+    setSize (WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 EasyverbAudioProcessorEditor::~EasyverbAudioProcessorEditor()
@@ -76,7 +79,7 @@ void EasyverbAudioProcessorEditor::resized()
 
     for (auto& component : triangle_pattern_)
     {
-        component->setBounds (getLocalBounds().withSizeKeepingCentre (400, 400 + TOP_SECTION_HEIGHT)); // Should be same as whole screen
+        component->setBounds (getLocalBounds().withSizeKeepingCentre (WINDOW_WIDTH, WINDOW_HEIGHT));
     }
 }
 
