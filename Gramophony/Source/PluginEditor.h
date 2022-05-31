@@ -8,15 +8,15 @@
 
 #pragma once
 
-#include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include <InfoButton.h>
+#include <JuceHeader.h>
 
 //==============================================================================
 /**
 */
-class GramophonyAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                        public juce::Slider::Listener
+class GramophonyAudioProcessorEditor : public juce::AudioProcessorEditor,
+                                       public juce::Slider::Listener
 {
 public:
     explicit GramophonyAudioProcessorEditor (GramophonyAudioProcessor&);
@@ -24,14 +24,13 @@ public:
 
     //==============================================================================
     void paint (juce::Graphics&) override;
-    void DrawThreePointLine(juce::Graphics& , float x1, float y1, 
-                            float x2, float y2, float x3, float y3);
+    void DrawThreePointLine (juce::Graphics&, float x1, float y1, float x2, float y2, float x3, float y3);
     void resized() override;
 
 private:
-    float sliderToAplhaValue(juce::Slider& slider);
+    float sliderToAplhaValue (juce::Slider& slider);
     void SetupSections();
-    void sliderValueChanged(juce::Slider* slider) override;
+    void sliderValueChanged (juce::Slider* slider) override;
 
     InfoButton info_button_;
 
@@ -39,7 +38,7 @@ private:
 
     juce::Slider compress_slider_;
     SliderAttatchmentPtr compress_slider_attachment_;
-    
+
     juce::Slider tone_slider_;
     SliderAttatchmentPtr tone_slider_attachment_;
 
@@ -51,7 +50,7 @@ private:
 
     juce::Slider mix_slider_;
     SliderAttatchmentPtr mix_slider_attachment_;
-    
+
     juce::Rectangle<int> top_section_;
     juce::Rectangle<int> picture_section_;
     juce::Rectangle<int> comp_section_;
@@ -63,7 +62,6 @@ private:
     juce::Rectangle<int> tone_text_section_;
     juce::Rectangle<int> vibrato_text_section_;
     juce::Rectangle<int> mix_text_section_;
-
 
     GramophonyAudioProcessor& audioProcessor;
 

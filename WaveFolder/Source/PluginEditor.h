@@ -8,14 +8,14 @@
 
 #pragma once
 
-#include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include <InfoButton.h>
+#include <JuceHeader.h>
 
 //==============================================================================
 /**
 */
-class WaveFolderAudioProcessorEditor  : public juce::AudioProcessorEditor
+class WaveFolderAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
     explicit WaveFolderAudioProcessorEditor (WaveFolderAudioProcessor&);
