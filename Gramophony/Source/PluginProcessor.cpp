@@ -80,16 +80,16 @@ int GramophonyAudioProcessor::getCurrentProgram()
     return 0;
 }
 
-void GramophonyAudioProcessor::setCurrentProgram (int index)
+void GramophonyAudioProcessor::setCurrentProgram (int /*index*/)
 {
 }
 
-const juce::String GramophonyAudioProcessor::getProgramName (int index)
+const juce::String GramophonyAudioProcessor::getProgramName (int /*index*/)
 {
     return {};
 }
 
-void GramophonyAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void GramophonyAudioProcessor::changeProgramName (int /*index*/, const juce::String& /*newName*/)
 {
 }
 
@@ -98,7 +98,8 @@ void GramophonyAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    juce::dsp::ProcessSpec spec = { sampleRate, samplesPerBlock, getMainBusNumOutputChannels() };
+    juce::dsp::ProcessSpec spec = { sampleRate, static_cast<juce::uint32>(samplesPerBlock), 
+                                    static_cast<juce::uint32>(getMainBusNumOutputChannels()) };
 
     chorus_.prepare (spec);
 
@@ -142,7 +143,7 @@ bool GramophonyAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 }
 #endif
 
-void GramophonyAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void GramophonyAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& /*midiMessages*/)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels = getTotalNumInputChannels();
@@ -161,7 +162,7 @@ void GramophonyAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
 
     mix_.pushDrySamples (buffer);
 
-    for (float sample = 0; sample < buffer.getNumSamples(); ++sample)
+    for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
     {
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {

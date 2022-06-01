@@ -140,8 +140,8 @@ void GramophonyAudioProcessorEditor::paint (juce::Graphics& g)
 
 float GramophonyAudioProcessorEditor::sliderToAplhaValue (juce::Slider& slider)
 {
-    float range = (slider.getMaximum() - slider.getMinimum());
-    return (slider.getValue() - slider.getMinimum()) / range;
+    double range = (slider.getMaximum() - slider.getMinimum());
+    return static_cast<float>((slider.getValue() - slider.getMinimum()) / range);
 }
 
 void GramophonyAudioProcessorEditor::DrawThreePointLine (juce::Graphics& g,
@@ -192,7 +192,7 @@ void GramophonyAudioProcessorEditor::SetupSections()
     mix_text_section_ = mix_section_.removeFromLeft (text_section_width);
 }
 
-void GramophonyAudioProcessorEditor::sliderValueChanged (juce::Slider* slider)
+void GramophonyAudioProcessorEditor::sliderValueChanged (juce::Slider* /*slider*/)
 {
     repaint();
 }
